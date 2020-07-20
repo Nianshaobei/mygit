@@ -25,6 +25,7 @@ public class FIXMessageHandling {
 
         for(String key : tagvalue.keySet()){
             String tagTrans, valueTrans, tvmark;
+            ParsedMessage parsedMessage = new ParsedMessage();
             if(mapDef.getTagFlag(key)){
                 tagTrans = mapDef.getTagMessageMap().get(key);
                 tvmark = key + tagvalue.get(key);
@@ -34,7 +35,9 @@ public class FIXMessageHandling {
                 tagTrans = mapDef.getTagMessageMap().get(key);
                 valueTrans = tagvalue.get(key);
             }
-            System.out.println(tagTrans+"为"+valueTrans);
+            parsedMessage.setTagParsing(tagTrans);
+            parsedMessage.setValueParsing(valueTrans);
+            System.out.println(parsedMessage.getTagParsing()+"为"+parsedMessage.getValueParsing());
         }
 
     }
