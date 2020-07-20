@@ -30,11 +30,9 @@ public class FIXMessageHandling {
                 tvmark = key + tagvalue.get(key);
                 //System.out.println(tvmark);
                 valueTrans = mapDef.getValueMessageMap().get(tvmark);
-                //System.out.println(tagTrans+"为"+valueTrans);
             }else{
                 tagTrans = mapDef.getTagMessageMap().get(key);
                 valueTrans = tagvalue.get(key);
-                //System.out.println(tagTrans+"为"+valueTrans);
             }
             System.out.println(tagTrans+"为"+valueTrans);
         }
