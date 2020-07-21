@@ -64,7 +64,7 @@ public class MapDef {
     }
 
     public boolean getTagFlag(String tag){
-        String[] extendTags = new String[]{"35", "98", "141", "40", "54"};
+        String[] extendTags = {"35", "98", "141", "40", "54"};
         for(String extendTag : extendTags){
             if(tag.equals(extendTag))
                 return true;
