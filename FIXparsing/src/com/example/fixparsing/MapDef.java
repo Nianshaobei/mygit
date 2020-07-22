@@ -2,6 +2,7 @@ package com.example.fixparsing;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class MapDef {
 
@@ -25,40 +26,69 @@ public class MapDef {
         return tagMessageMap;
     }
 
-    public Map<String,String> getValueMessageMap(){
-        Map<String, String> valueMessageMap = new HashMap<>();
-        valueMessageMap.put("350", "心跳");
-        valueMessageMap.put("351", "测试请求");
-        valueMessageMap.put("352", "重发请求");
-        valueMessageMap.put("353", "回绝");
-        valueMessageMap.put("354", "序列号重置");
-        valueMessageMap.put("355", "登出");
-        valueMessageMap.put("357", "公告");
-        valueMessageMap.put("358", "执行报告");
-        valueMessageMap.put("35A", "登入");
-        valueMessageMap.put("35B", "消息");
-        valueMessageMap.put("35D", "新订单");
-        valueMessageMap.put("35F", "订单撤销请求");
-        valueMessageMap.put("35H", "订单状况请求");
-        valueMessageMap.put("35R", "报价请求");
-        valueMessageMap.put("35S", "报价确认");
+    public Map<String,Function<String, String>> getValueMessageMap(){
+        Map<String, Function<String, String>> valueMessageMap = new HashMap<>();
+        valueMessageMap.put("35", new Function<String, String>() {
+            @Override
+            public String apply(String s) {
+                switch (s){
+                    case "0" : return "心跳";
+                    case "1" : return "测试请求";
+                    case "2" : return "重发请求";
+                    case "3" : return "回绝";
+                    case "4" : return "序列号重置";
+                    case "5" : return "登出";
+                    case "7" : return "公告";
+                    case "8" : return "执行报告";
+                    case "A" : return "登入";
+                    case "B" : return "消息";
+                    case "D" : return "新订单";
+                    case "F" : return "订单撤销请求";
+                    case "H" : return "订单状况请求";
+                    case "R" : return "报价请求";
+                    case "S" : return "报价确认";
+                    default : return "未知";
+                }
+            }
+        });
 
-        valueMessageMap.put("980", "无/其他");
-        valueMessageMap.put("981", "PKCS");
-        valueMessageMap.put("982", "DES");
-        valueMessageMap.put("983", "PKCS/DES");
-        valueMessageMap.put("984", "PGP/DES");
 
-        valueMessageMap.put("141Y", "是");
-        valueMessageMap.put("141N", "否");
 
-        valueMessageMap.put("401", "市价订单");
-        valueMessageMap.put("402", "限价订单");
+        valueMessageMap.put("98", s -> {
+            switch (s){
+                case "0" : return "无/其他";
+                case "1" : return "PKCS";
+                case "2" : return "DES";
+                case "3" : return "PKCS/DES";
+                case "4" : return "PGP/DES";
+                default : return "未知";
+            }
+        });
 
-        valueMessageMap.put("541", "买方");
-        valueMessageMap.put("542", "卖方");
-        valueMessageMap.put("545", "卖空");
+        valueMessageMap.put("141", s -> {
+            switch (s){
+                case "Y" : return "是";
+                case "N" : return "否";
+                default : return "未知";
+            }
+        });
 
+        valueMessageMap.put("40", s -> {
+            switch (s){
+                case "1" : return "市价订单";
+                case "2" : return "限价订单";
+                default : return "未知";
+            }
+        });
+
+        valueMessageMap.put("54", s -> {
+            switch (s){
+                case "1" : return "买方";
+                case "2" : return "卖方";
+                case "5" : return "卖空";
+                default : return "未知";
+            }
+        });
 
         return valueMessageMap;
     }

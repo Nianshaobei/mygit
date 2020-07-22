@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
  * TODO implement this interface
  */
 public interface FixMessageParser {
+
     /**
      * Parse a string {@code input} as FIX message and write the parsed result into {@code output}.
      *

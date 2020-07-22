@@ -5,16 +5,16 @@ import org.junit.jupiter.api.Test;
 
 class FIXMessageTest {
     @Test
-    void testFixNewOrderSingle() {
+    void testFixNewOrderSingle() throws FixMessageParser.ParseException {
         FixMessage message = new FixMessage();
         FIXMessageHandling handling = new FIXMessageHandling();
-        handling.Translate(message.newOrderSingle);
+        System.out.println(handling.Translate(message.newOrderSingle));
     }
 
     @Test
     void testInvalidFixMessages() {
         final String[] input = {
-                "123"
+                "123=="
         };
 
         for (String s : input) {
