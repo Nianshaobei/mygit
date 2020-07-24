@@ -5,38 +5,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
-
 class FixMessageParserTest {
     private FixMessageParser parser;
-    FixMessage message = new FixMessage();
-    FIXMessageHandling handling = new FIXMessageHandling();
 
     @BeforeEach
     void setUp() {
-        // TODO use your implementation here
-        parser = new FixMessageParser() {
-            @Override
-            public void parse(@Nullable String input, StringBuilder output) throws FixMessageParser.ParseException {
-                if (!handling.isValid(input)) {
-                    throw new FixMessageParser.ParseException(input);
-                }
-                System.out.println(output);
-            }
-        };
+        parser = new StdFixMessageParser();
     }
 
     @Test
-    void testFixNewOrderSingle() {
-        try {
-            parser.parse(message.newOrderSingle, handling.Translate(message.newOrderSingle));
-        } catch (FixMessageParser.ParseException e) {
-            System.out.println("Invilid FIX message!");
-        }
-    }
-
-    @Test
-    // FIXME fix test error and make it run
+        // FIXME fix test error and make it run
     void testValidFixMessages() throws Exception {
         final String input = FixMessage.NEW_ORDER_SINGLE;
         final String expected = "协议版本:FIX.4.4\n" +
