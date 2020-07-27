@@ -14,9 +14,19 @@ class FixMessageParserTest {
     }
 
     @Test
+    void testFixNewOrderSingle() throws FixMessageParser.ParseException {
+        final String input = FixMessage.NEW_ORDER_SINGLE;
+        FixMessageParser parser1 = new XMLFixMessageParser();
+        StringBuilder output = new StringBuilder();
+        parser1.parse(input, output);
+        System.out.println(output);
+    }
+
+    @Test
         // FIXME fix test error and make it run
     void testValidFixMessages() throws Exception {
         final String input = FixMessage.NEW_ORDER_SINGLE;
+
         final String expected = "协议版本:FIX.4.4\n" +
                 "消息体长度:100\n" +
                 "消息类型:新订单\n" +
@@ -25,7 +35,7 @@ class FixMessageParserTest {
                 "订单方:买方\n" +
                 "订单总数:5000\n" +
                 "交易时间:2003061501:14:49\n" +
-                "校验和:12";
+                "校验和:127";
 
         final StringBuilder sb = new StringBuilder();
 
@@ -49,5 +59,6 @@ class FixMessageParserTest {
                     () -> parser.parse(s, sb)
             );
         }
+
     }
 }

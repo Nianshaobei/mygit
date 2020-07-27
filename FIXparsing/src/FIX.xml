@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<FIXmessage>
+    <tag id="35" trans="消息类型">
+        <value id="0" trans="心跳"></value>
+        <value id="1" trans="测试请求"></value>
+        <value id="2" trans="重发请求"></value>
+        <value id="3" trans="回绝"></value>
+        <value id="4" trans="序列号重置"></value>
+        <value id="5" trans="登出"></value>
+        <value id="7" trans="公告"></value>
+        <value id="8" trans="执行报告"></value>
+        <value id="A" trans="登入"></value>
+        <value id="B" trans="消息"></value>
+        <value id="D" trans="新订单"></value>
+        <value id="F" trans="订单撤销请求"></value>
+        <value id="H" trans="订单状况请求"></value>
+        <value id="R" trans="报价请求"></value>
+        <value id="S" trans="报价确认"></value>
+    </tag>
+    <tag id="40" trans="订单类型">
+        <value id="1" trans="市价订单"></value>
+        <value id="2" trans="限价订单"></value>
+    </tag>
+    <tag id="54" trans="订单方">
+        <value id="1" trans="买方"></value>
+        <value id="2" trans="卖方"></value>
+        <value id="5" trans="卖空"></value>
+    </tag>
+    <tag id="98" trans="加密方式">
+        <value id="0" trans="无/其他"></value>
+        <value id="1" trans="PKCS"></value>
+        <value id="2" trans="DES"></value>
+        <value id="3" trans="PKCS/DES"></value>
+        <value id="4" trans="PGP/DES"></value>
+    </tag>
+
+    <tag id="8" trans="版本信息"></tag>
+    <tag id="9" trans="消息长度"></tag>
+    <tag id="10" trans="校验和"></tag>
+    <tag id="11" trans="客户端订单ID"></tag>
+    <tag id="34" trans="消息序列号"></tag>
+    <tag id="38" trans="订单总数"></tag>
+    <tag id="49" trans="发送方ID"></tag>
+    <tag id="52" trans="发送时间"></tag>
+    <tag id="56" trans="接收方ID"></tag>
+    <tag id="60" trans="交易时间"></tag>
+    <tag id="108" trans="心跳阈"></tag>
+</FIXmessage>

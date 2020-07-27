@@ -3,5 +3,5 @@ package com.example.fixparsing;
 public interface FixTagTranslator {
     String getName();
 
-    String translateValue(final String value);
+    String translateValue(final String value) throws FixMessageParser.ParseException;
 }

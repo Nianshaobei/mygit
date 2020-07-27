@@ -1,26 +1,26 @@
 package com.example.fixparsing;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FIXMessageHandling {
 
-    /**
-     * 把输入的fixmessage拆分成键值对，并将键值对存入linkedHashMap中
-     */
-    public Map<String, String> TagValue(String fixmessage) {
+    Map<String, String> splitMessage(String input) throws FixMessageParser.ParseException {
         Map<String, String> tagvalue = new LinkedHashMap<>();  //保证插入顺序
-        if(isValid(fixmessage)){
-            String[] arrsplit = fixmessage.split("\002");
+        if(isValid(input)){
+            String[] arrsplit = input.split("\002");
             for(String strsplit : arrsplit){
                 String[] arrSplitEqual;
                 arrSplitEqual = strsplit.split("=");
                 tagvalue.put(arrSplitEqual[0],arrSplitEqual[1]);
             }
+        }else{
+            throw new FixMessageParser.ParseException(input);
         }
-
         return tagvalue;
     }
+
 
     boolean isValid(String input) {
         String[] arrsplit = input.split("\002");
@@ -63,40 +63,11 @@ public class FIXMessageHandling {
                 "1512","1535","1538","1539","1610","1611","1612","1613","1614","1615","1616","1656","1671",
                 "1691","1692","1693","1770","1771","1772","1773","1774","1775","1776","1777","1778","1779",
                 "1780","1812","1813","1814","1867","1868","1869","1870","5681"};
-        int length = validTag.length;
-        while(length-- > 0){
-            if(tag.equals(validTag[length])){
-                return true;
-            }
+        HashSet<String> validTagSet = new HashSet<>();
+        for(int i=0;i<validTag.length;i++){
+            validTagSet.add(validTag[i]);
         }
-        return false;
-    }
-
-
-    public StringBuilder Translate(String fixmessage) {
-        Map<String, String> tagvalue = TagValue(fixmessage);
-        StringBuilder out = new StringBuilder();
-        MapDef mapDef = new MapDef();
-
-        for(String key : tagvalue.keySet()){
-            String tagTrans, valueTrans, tv;
-            ParsedMessage parsedMessage = new ParsedMessage();
-            if(mapDef.getTagFlag(key)){
-                tagTrans = mapDef.getTagMessageMap().get(key);
-                valueTrans = mapDef.getValueMessageMap().get(key).apply(tagvalue.get(key));
-            }else{
-                tagTrans = mapDef.getTagMessageMap().get(key);
-                valueTrans = tagvalue.get(key);
-            }
-            parsedMessage.setTagParsing(tagTrans);
-            parsedMessage.setValueParsing(valueTrans);
-            tv = parsedMessage.getTagParsing() + ":" + parsedMessage.getValueParsing();
-            out.append(tv).append("\n");
-            //System.out.println(parsedMessage.getTagParsing()+"为"+parsedMessage.getValueParsing());
-        }
-
-        return out;
-
+        return validTagSet.contains(tag);
     }
 
 }

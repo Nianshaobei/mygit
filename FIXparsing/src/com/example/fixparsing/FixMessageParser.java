@@ -1,8 +1,7 @@
 package com.example.fixparsing;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO implement this interface
@@ -17,7 +16,8 @@ public interface FixMessageParser {
      * @throws ParseException if not valid FIX message or tag not recognized
      */
     default void parse(@Nullable final String input, final StringBuilder output) throws ParseException {
-        parse(input, output, Collections.emptyMap());
+        Map<Integer, FixTagTranslator> customTagTranslators = new HashMap<>(  );
+        parse(input, output, customTagTranslators);
     }
 
     default void parse(
