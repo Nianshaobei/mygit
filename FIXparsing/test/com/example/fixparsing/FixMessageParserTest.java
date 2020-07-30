@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 class FixMessageParserTest {
     private FixMessageParser parser;
 
@@ -14,12 +16,25 @@ class FixMessageParserTest {
     }
 
     @Test
-    void testFixNewOrderSingle() throws FixMessageParser.ParseException {
+    void testFixNewOrderSingletoJson() throws IOException, FixMessageParser.ParseException {
         final String input = FixMessage.NEW_ORDER_SINGLE;
-        FixMessageParser parser1 = new XMLFixMessageParser();
-        StringBuilder output = new StringBuilder();
-        parser1.parse(input, output);
-        System.out.println(output);
+
+        final String expected = "{\n" +
+                "\t\"订单方\":\"买方\",\n" +
+                "\t\"版本信息\":\"FIX.4.4\",\n" +
+                "\t\"订单类型\":\"市价订单\",\n" +
+                "\t\"消息类型\":\"新订单\",\n" +
+                "\t\"订单总数\":\"5000\",\n" +
+                "\t\"交易时间\":\"2003061501:14:49\",\n" +
+                "\t\"消息长度\":\"100\",\n" +
+                "\t\"校验和\":\"127\",\n" +
+                "\t\"客户端订单ID\":\"12345\"\n" +
+                "}";
+
+        FixMessageWriter writer = new JsonFixMessageWriter();
+        parser.parse(input, writer);
+
+        Truth.assertThat(((JsonFixMessageWriter) writer).getPrettyJson()).isEqualTo(expected);
     }
 
     @Test

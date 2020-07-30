@@ -9,4 +9,5 @@ public class SimpleFixMessageWriter implements FixMessageWriter {
     public void write(final String key, final String val) throws IOException {
         sb.append(key).append(" => ").append(val).append(System.lineSeparator());
     }
+
 }

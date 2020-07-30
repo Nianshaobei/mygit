@@ -1,6 +1,7 @@
 package com.example.fixparsing;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -20,10 +21,22 @@ public interface FixMessageParser {
         parse(input, output, customTagTranslators);
     }
 
+    default void parse(@Nullable final String input, final FixMessageWriter writer) throws ParseException, IOException {
+        parse(input, writer, Collections.emptyMap());
+    }
+
     default void parse(
             @Nullable final String input, final StringBuilder output,
             final Map<Integer, FixTagTranslator> customTagTranslators
     ) throws ParseException {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    default void parse(
+            @Nullable final String input,
+            final FixMessageWriter writer,
+            final Map<Integer, FixTagTranslator> customTagTranslators
+    ) throws ParseException, IOException {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

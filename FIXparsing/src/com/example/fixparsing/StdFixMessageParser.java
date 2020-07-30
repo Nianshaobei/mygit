@@ -1,67 +1,58 @@
 package com.example.fixparsing;
 
+import com.google.common.collect.Maps;
+import org.dom4j.DocumentException;
+
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.*;
 
 class StdFixMessageParser implements FixMessageParser {
 
-    StdFixTag8Translator stdFixTag8Translator = new StdFixTag8Translator();
-    StdFixTag9Translator stdFixTag9Translator = new StdFixTag9Translator();
-    StdFixTag10Translator stdFixTag10Translator = new StdFixTag10Translator();
-    StdFixTag11Translator stdFixTag11Translator = new StdFixTag11Translator();
-    StdFixTag34Translator stdFixTag34Translator = new StdFixTag34Translator();
-    StdFixTag35Translator stdFixTag35Translator = new StdFixTag35Translator();
-    StdFixTag38Translator stdFixTag38Translator = new StdFixTag38Translator();
-    StdFixTag40Translator stdFixTag40Translator = new StdFixTag40Translator();
-    StdFixTag49Translator stdFixTag49Translator = new StdFixTag49Translator();
-    StdFixTag52Translator stdFixTag52Translator = new StdFixTag52Translator();
-    StdFixTag54Translator stdFixTag54Translator = new StdFixTag54Translator();
-    StdFixTag56Translator stdFixTag56Translator = new StdFixTag56Translator();
-    StdFixTag60Translator stdFixTag60Translator = new StdFixTag60Translator();
-    StdFixTag98Translator stdFixTag98Translator = new StdFixTag98Translator();
-    StdFixTag108Translator stdFixTag108Translator = new StdFixTag108Translator();
+    private static final XMLFixMessageParser xmlFixMessageParser = new XMLFixMessageParser();
+
+    private Map<Integer, FixTagTranslator> loadBuiltinTranslators() {
+        final Map<Integer,FixTagTranslator> map = xmlFixMessageParser.XMLParser("src/FIX.xml");
+        return map;
+    }
 
     @Override
     public void parse(
             @Nullable final String input,
-            final StringBuilder output,
+            final FixMessageWriter writer,
             final Map<Integer, FixTagTranslator> customTagTranslators
-    ) throws ParseException {
+    ) throws ParseException, IOException {
         // TODO add implementation here
-        customTagTranslators.put(8, stdFixTag8Translator);
-        customTagTranslators.put(9, stdFixTag9Translator);
-        customTagTranslators.put(10, stdFixTag10Translator);
-        customTagTranslators.put(11, stdFixTag11Translator);
-        customTagTranslators.put(34, stdFixTag34Translator);
-        customTagTranslators.put(35, stdFixTag35Translator);
-        customTagTranslators.put(38, stdFixTag38Translator);
-        customTagTranslators.put(40, stdFixTag40Translator);
-        customTagTranslators.put(49, stdFixTag49Translator);
-        customTagTranslators.put(52, stdFixTag52Translator);
-        customTagTranslators.put(54, stdFixTag54Translator);
-        customTagTranslators.put(56, stdFixTag56Translator);
-        customTagTranslators.put(60, stdFixTag60Translator);
-        customTagTranslators.put(98, stdFixTag98Translator);
-        customTagTranslators.put(108, stdFixTag108Translator);
+
+        final Map<Integer,FixTagTranslator> builtinTranslators = loadBuiltinTranslators();
+        builtinTranslators.putAll(customTagTranslators);
 
         FIXMessageHandling handling = new FIXMessageHandling();
         Map<String, String> tagvalue = handling.splitMessage(input);
 
-        for(String key : tagvalue.keySet()){
-            String tagTrans, valueTrans,tv;
+        for(Map.Entry<String, String> entry : tagvalue.entrySet()){
+            final String key = entry.getKey();
+            final String val = entry.getValue();
+            String tagTrans, valueTrans;
             ParsedMessage parsedMessage = new ParsedMessage();
-            int keyint = Integer.parseInt(key);
 
-            tagTrans = customTagTranslators.get(keyint).getName();
-            valueTrans = customTagTranslators.get(keyint).translateValue(tagvalue.get(key));
+            try {
+                int keyint = Integer.parseInt(key);
 
-            parsedMessage.setTagParsing(tagTrans);
-            parsedMessage.setValueParsing(valueTrans);
+                if(builtinTranslators.get(keyint)!=null){
+                    tagTrans = builtinTranslators.get(keyint).getName();
+                    valueTrans = builtinTranslators.get(keyint).translateValue(val);
 
-            tv = parsedMessage.getTagParsing() + ":" + parsedMessage.getValueParsing();
-            output.append(tv).append("\n");
+                    parsedMessage.setTagParsing(tagTrans);
+                    parsedMessage.setValueParsing(valueTrans);
+                }
+
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+            }
+
+            writer.write(parsedMessage.getTagParsing(),parsedMessage.getValueParsing());
         }
-        output.deleteCharAt(output.length()-1);
     }
 
 }

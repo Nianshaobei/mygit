@@ -9,57 +9,78 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 
+import com.google.common.collect.Maps;
 import org.dom4j.*;
 import org.dom4j.io.SAXReader;
 
-public class XMLFixMessageParser implements FixMessageParser{
-    @Override
-    public void parse(
-            @Nullable final String input,
-            final StringBuilder output
-    ) throws ParseException {
+public class XMLFixMessageParser{
 
-        FIXMessageHandling handling = new FIXMessageHandling();
-        Map<String, String> tagvalue = handling.splitMessage(input);
+    public Map<Integer,FixTagTranslator> XMLParser(String XMLpath) {
 
-        String tagTrans,valueTrans = "",tv;
-        ParsedMessage parsedMessage = new ParsedMessage();
-        
+        Map<Integer,FixTagTranslator> map = Maps.newHashMap();
+
         try{
             SAXReader reader = new SAXReader();
-            Document document = reader.read(new File("src/FIX.xml"));
+            Document document = reader.read(new File(XMLpath));
             Element root = document.getRootElement();
-            for(String key: tagvalue.keySet()){
-                List<Element> tagList = root.elements();
 
-                for(Element e : tagList){
-                    Attribute tag = e.attribute("id");
-                    if(key.equals(tag.getValue())){
-                        tagTrans = e.attribute("trans").getValue();
-                        Iterator<?> it=e.elementIterator();
-                        if(it.hasNext()){
-                            List<Element> valueList = e.elements();
-                            for(Element v : valueList){
-                                Attribute value = v.attribute("id");
-                                if(tagvalue.get(key).equals(value.getValue())){
-                                    valueTrans = v.attribute("trans").getValue();
-                                }
+            List<Element> tagList = root.elements();
+            for(Element e : tagList){
+                int tagint;
+                FixTagTranslator fixTagTranslator;
+                Attribute tag = e.attribute("id");
+                String tagTrans = e.attribute("trans").getValue();
+
+                try{
+                    tagint = Integer.parseInt(tag.getValue());
+
+                    Iterator<?> it = e.elementIterator();
+                    if(it.hasNext()){
+                        List<Element> valueList = e.elements();
+                        fixTagTranslator = new FixTagTranslator() {
+                            @Override
+                            public String getName() {
+                                return tagTrans;
                             }
-                        }else{
-                            valueTrans = tagvalue.get(key);
-                        }
-                        parsedMessage.setTagParsing(tagTrans);
-                        parsedMessage.setValueParsing(valueTrans);
-                        
-                        tv = parsedMessage.getTagParsing() + ":" + parsedMessage.getValueParsing();
-                        output.append(tv).append("\n");
+
+                            @Override
+                            public String translateValue(String value) {
+                                Map<String, String> valueMap = new HashMap<>();
+                                for(Element v : valueList){
+                                    Attribute valueAttributeID = v.attribute("id");
+                                    Attribute valueAttributeTrans = v.attribute("trans");
+                                    if(valueAttributeID.getValue()!=null){
+                                        valueMap.put(valueAttributeID.getValue(), valueAttributeTrans.getValue());
+                                    }
+                                }
+                                return valueMap.get(value);
+                            }
+                        };
+
+                    }else{
+                        fixTagTranslator = new FixTagTranslator() {
+                            @Override
+                            public String getName() {
+                                return tagTrans;
+                            }
+
+                            @Override
+                            public String translateValue(String value) {
+                                return value;
+                            }
+                        };
                     }
+                    map.put(tagint, fixTagTranslator);
+                }catch (NumberFormatException e1){
+                    e1.printStackTrace();
                 }
+
             }
-            output.deleteCharAt(output.length()-1);
         }catch (DocumentException e){
             e.printStackTrace();
         }
 
+        return map;
     }
+
 }
