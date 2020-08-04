@@ -1,21 +1,19 @@
 package com.example.fixparsing;
 
 import java.io.IOException;
-import com.alibaba.fastjson.JSONObject;
+import javax.json.*;
 
 public class JsonFixMessageWriter implements FixMessageWriter {
-    private final JSONObject object = new JSONObject();
+    private JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
 
     @Override
     public void write(String key, String val) throws IOException {
-        object.put(key, val);
+        jsonBuilder.add(key,val);
     }
 
-//    public JSONObject getObject(){
-//        return object;
-//    }
-
-    public String getPrettyJson(){
-        return CommonUtils.prettyJson(object.toJSONString());
+    JsonObject getObject(){
+        JsonObject jsonObject = jsonBuilder.build();
+        return jsonObject;
     }
+
 }

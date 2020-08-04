@@ -19,59 +19,61 @@ class FixMessageParserTest {
     void testFixNewOrderSingletoJson() throws IOException, FixMessageParser.ParseException {
         final String input = FixMessage.NEW_ORDER_SINGLE;
 
-        final String expected = "{\n" +
-                "\t\"订单方\":\"买方\",\n" +
-                "\t\"版本信息\":\"FIX.4.4\",\n" +
-                "\t\"订单类型\":\"市价订单\",\n" +
-                "\t\"消息类型\":\"新订单\",\n" +
-                "\t\"订单总数\":\"5000\",\n" +
-                "\t\"交易时间\":\"2003061501:14:49\",\n" +
-                "\t\"消息长度\":\"100\",\n" +
-                "\t\"校验和\":\"127\",\n" +
-                "\t\"客户端订单ID\":\"12345\"\n" +
-                "}";
+        Dom4JReaderUtils.resource = "src\\FIX.xml";
+
+        final String expected = "{\"BeginString\":\"FIX.4.4\"," +
+                "\"BodyLength\":\"100\"," +
+                "\"MsgType\":\"ORDER_SINGLE\"," +
+                "\"ClOrdID\":\"12345\"," +
+                "\"OrdType\":\"MARKET\"," +
+                "\"Side\":\"BUY\"," +
+                "\"OrderQty\":\"5000\"," +
+                "\"TransactTime\":\"2003061501:14:49\"," +
+                "\"CheckSum\":\"127\"}";
 
         FixMessageWriter writer = new JsonFixMessageWriter();
         parser.parse(input, writer);
 
-        Truth.assertThat(((JsonFixMessageWriter) writer).getPrettyJson()).isEqualTo(expected);
+        Truth.assertThat(((JsonFixMessageWriter) writer).getObject().toString()).isEqualTo(expected);
     }
 
     @Test
         // FIXME fix test error and make it run
-    void testValidFixMessages() throws Exception {
+    void testFixNewOrderSingletoString() throws Exception {
         final String input = FixMessage.NEW_ORDER_SINGLE;
 
-        final String expected = "协议版本:FIX.4.4\n" +
-                "消息体长度:100\n" +
-                "消息类型:新订单\n" +
-                "客户端订单ID:12345\n" +
-                "订单类型:市价订单\n" +
-                "订单方:买方\n" +
-                "订单总数:5000\n" +
-                "交易时间:2003061501:14:49\n" +
-                "校验和:127";
+        Dom4JReaderUtils.resource = "src\\FIX.xml";
 
-        final StringBuilder sb = new StringBuilder();
+        final String expected = "BeginString => FIX.4.4\r\n" +
+                "BodyLength => 100\r\n" +
+                "MsgType => ORDER_SINGLE\r\n" +
+                "ClOrdID => 12345\r\n" +
+                "OrdType => MARKET\r\n" +
+                "Side => BUY\r\n" +
+                "OrderQty => 5000\r\n" +
+                "TransactTime => 2003061501:14:49\r\n" +
+                "CheckSum => 127\r\n";
 
-        parser.parse(input, sb);
+        FixMessageWriter writer = new SimpleFixMessageWriter();
+        parser.parse(input, writer);
 
-        Truth.assertThat(sb.toString()).isEqualTo(expected);
+        Truth.assertThat(((SimpleFixMessageWriter) writer).getSb().toString()).isEqualTo(expected);
     }
 
     @Test
     void testInvalidFixMessages() throws Exception {
         final String[] input = {
                 "123",
-                "8=2"
+                "8==2"
         };
 
         for (String s : input) {
-            final StringBuilder sb = new StringBuilder();
+
+            FixMessageWriter writer = new JsonFixMessageWriter();
 
             Assertions.assertThrows(
                     FixMessageParser.ParseException.class,
-                    () -> parser.parse(s, sb)
+                    () -> parser.parse(s, writer)
             );
         }
 

@@ -10,4 +10,7 @@ public class SimpleFixMessageWriter implements FixMessageWriter {
         sb.append(key).append(" => ").append(val).append(System.lineSeparator());
     }
 
+    StringBuilder getSb(){
+        return sb;
+    }
 }
