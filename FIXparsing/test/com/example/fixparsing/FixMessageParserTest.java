@@ -21,20 +21,22 @@ class FixMessageParserTest {
 
         Dom4JReaderUtils.resource = "src\\FIX.xml";
 
-        final String expected = "{\"BeginString\":\"FIX.4.4\"," +
-                "\"BodyLength\":\"100\"," +
-                "\"MsgType\":\"ORDER_SINGLE\"," +
-                "\"ClOrdID\":\"12345\"," +
-                "\"OrdType\":\"MARKET\"," +
-                "\"Side\":\"BUY\"," +
-                "\"OrderQty\":\"5000\"," +
-                "\"TransactTime\":\"2003061501:14:49\"," +
-                "\"CheckSum\":\"127\"}";
+        final String expected = "{\n" +
+                "\t\"BeginString\":\"FIX.4.4\",\n" +
+                "\t\"BodyLength\":\"100\",\n" +
+                "\t\"MsgType\":\"ORDER_SINGLE\",\n" +
+                "\t\"ClOrdID\":\"12345\",\n" +
+                "\t\"OrdType\":\"MARKET\",\n" +
+                "\t\"Side\":\"BUY\",\n" +
+                "\t\"OrderQty\":\"5000\",\n" +
+                "\t\"TransactTime\":\"2003061501:14:49\",\n" +
+                "\t\"CheckSum\":\"127\"\n" +
+                "}";
 
         FixMessageWriter writer = new JsonFixMessageWriter();
         parser.parse(input, writer);
 
-        Truth.assertThat(((JsonFixMessageWriter) writer).getObject().toString()).isEqualTo(expected);
+        Truth.assertThat(((JsonFixMessageWriter) writer).getFormatJson()).isEqualTo(expected);
     }
 
     @Test

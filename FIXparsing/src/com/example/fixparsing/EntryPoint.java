@@ -34,9 +34,7 @@ public class EntryPoint {
                 file.createNewFile();
             }
             OutputStream os = new FileOutputStream(file);
-            JsonWriter jsonWriter = Json.createWriter(os);
-            jsonWriter.writeObject(((JsonFixMessageWriter) writerToFile).getObject());
-            jsonWriter.close();
+            os.write(((JsonFixMessageWriter) writerToFile).getFormatJson().getBytes());
             os.close();
         } catch (IOException e) {
             e.printStackTrace();

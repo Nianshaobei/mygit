@@ -16,4 +16,9 @@ public class JsonFixMessageWriter implements FixMessageWriter {
         return jsonObject;
     }
 
+    String getFormatJson(){
+        String jsonString = JsonFormatUtils.formatJson(getObject().toString());
+        return jsonString;
+    }
+
 }
