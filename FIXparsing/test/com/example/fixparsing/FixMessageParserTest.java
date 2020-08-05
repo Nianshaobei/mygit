@@ -4,6 +4,8 @@ import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
@@ -40,7 +42,6 @@ class FixMessageParserTest {
     }
 
     @Test
-        // FIXME fix test error and make it run
     void testFixNewOrderSingletoString() throws Exception {
         final String input = FixMessage.NEW_ORDER_SINGLE;
 
@@ -62,7 +63,21 @@ class FixMessageParserTest {
         Truth.assertThat(((SimpleFixMessageWriter) writer).getSb().toString()).isEqualTo(expected);
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {FixMessage.NEW_ORDER_SINGLE, FixMessage.NEW_ORDER_SINGLE_1})
+    void testSplitMessage(String message) throws FixMessageParser.ParseException {
+        System.out.println(FIXMessageHandling.splitMessage(message));
+    }
+
     @Test
+    void testJsonFormat(){
+        String str = "{\"content\":\"this is the msg content.\",\"tousers\":\"user1|user2\",\"msgtype\":\"texturl\",\"appkey\":\"test\",\"domain\":\"test\","
+                + "\"system\":{\"wechat\":{\"safe\":\"1\"}},\"texturl\":{\"urltype\":\"0\",\"user1\":{\"spStatus\":\"user01\",\"workid\":\"work01\"},\"user2\":{\"spStatus\":\"user02\",\"workid\":\"work02\"}}}";
+        System.out.println(JsonFormatUtils.formatJson(str));
+    }
+
+    @Test
+    // FIXME fix test error and make it run
     void testInvalidFixMessages() throws Exception {
         final String[] input = {
                 "123",
