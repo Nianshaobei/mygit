@@ -7,34 +7,33 @@ import org.dom4j.Element;
 
 import java.util.HashMap;
 import java.util.Iterator;
-
 import java.util.List;
 import java.util.Map;
 
-public class XMLParserUtils {
+public class XmlParserUtils {
 
-    private static Map<Integer,FixTagTranslator> xmlParser() {
-        Map<Integer,FixTagTranslator> map = Maps.newHashMap();
+    private static Map<Integer, FixTagTranslator> xmlParser(String resource) {
+        Map<Integer, FixTagTranslator> map = Maps.newHashMap();
 
-        Document document = Dom4JReaderUtils.getDocument();
+        Document document = Dom4JReaderUtils.getDocument(resource);
         Element root = document.getRootElement();
 
         List<Element> tagList = root.elements();
-        for(Element t : tagList){
+        for (Element t : tagList) {
             int tagint;
             FixTagTranslator fixTagTranslator;
             Attribute tag = t.attribute("number");
             String tagtrans = t.attribute("name").getValue();
 
-            try{
+            try {
                 tagint = Integer.parseInt(tag.getValue());
 
                 Iterator<?> it = t.elementIterator();
-                if(it.hasNext()){
+                if (it.hasNext()) {
 
                     List<Element> valueList = t.elements();
                     Map<String, String> valueMap = new HashMap<>();
-                    for(Element v : valueList){
+                    for (Element v : valueList) {
                         Attribute valueAttributeID = v.attribute("enum");
                         Attribute valueAttributeTrans = v.attribute("description");
                         valueMap.put(valueAttributeID.getValue(), valueAttributeTrans.getValue());
@@ -48,14 +47,14 @@ public class XMLParserUtils {
 
                         @Override
                         public String translateValue(String value) {
-                            if(valueMap.get(value)!=null){
+                            if (valueMap.get(value) != null) {
                                 return valueMap.get(value);
                             }
                             return "Unknown";
                         }
                     };
 
-                }else{
+                } else {
 
                     fixTagTranslator = new FixTagTranslator() {
                         @Override
@@ -70,7 +69,7 @@ public class XMLParserUtils {
                     };
                 }
                 map.put(tagint, fixTagTranslator);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
 
@@ -78,8 +77,8 @@ public class XMLParserUtils {
         return map;
     }
 
-    static Map<Integer, FixTagTranslator> loadBuiltinTranslators() {
-        Map<Integer,FixTagTranslator> map = xmlParser();
+    static Map<Integer, FixTagTranslator> loadBuiltinTranslators(String resource) {
+        Map<Integer, FixTagTranslator> map = xmlParser(resource);
         return map;
     }
 

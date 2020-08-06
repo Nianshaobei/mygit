@@ -1,61 +1,24 @@
 package com.example.fixparsing;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
+import javax.json.stream.JsonGenerator;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+
 public class JsonFormatUtils {
 
-    public static String formatJson(String jsonStr) {
-        if (null == jsonStr || "".equals(jsonStr))
-            return "";
-        StringBuilder sb = new StringBuilder();
-        char last = '\0';
-        char current = '\0';
-        int indent = 0;
-        boolean isInQuotationMarks = false;
-        for (int i = 0; i < jsonStr.length(); i++) {
-            last = current;
-            current = jsonStr.charAt(i);
-            switch (current) {
-                case '"':
-                    if (last != '\\'){
-                        isInQuotationMarks = !isInQuotationMarks;
-                    }
-                    sb.append(current);
-                    break;
-                case '{':
-                case '[':
-                    sb.append(current);
-                    if (!isInQuotationMarks) {
-                        sb.append('\n');
-                        indent++;
-                        addIndentBlank(sb, indent);
-                    }
-                    break;
-                case '}':
-                case ']':
-                    if (!isInQuotationMarks) {
-                        sb.append('\n');
-                        indent--;
-                        addIndentBlank(sb, indent);
-                    }
-                    sb.append(current);
-                    break;
-                case ',':
-                    sb.append(current);
-                    if (last != '\\' && !isInQuotationMarks) {
-                        sb.append('\n');
-                        addIndentBlank(sb, indent);
-                    }
-                    break;
-                default:
-                    sb.append(current);
-            }
+    static String jsonObject2prettyString(JsonObject jsonObject) {
+        Map<String, Boolean> config = new HashMap<>();
+        config.put(JsonGenerator.PRETTY_PRINTING, true);
+        JsonWriterFactory jsonWriterFactory = Json.createWriterFactory(config);
+        StringWriter stringWriter = new StringWriter();
+        try (JsonWriter jsonWriter = jsonWriterFactory.createWriter(stringWriter)) {
+            jsonWriter.writeObject(jsonObject);
         }
-
-        return sb.toString();
-    }
-
-    private static void addIndentBlank(StringBuilder sb, int indent) {
-        for (int i = 0; i < indent; i++) {
-            sb.append('\t');
-        }
+        return stringWriter.toString();
     }
 }

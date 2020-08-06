@@ -7,10 +7,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import java.io.IOException;
+import java.util.Collections;
 
 class FixMessageParserTest {
     private FixMessageParser parser;
+    static final String NEW_ORDER_SINGLE = "8=FIX.4.4\0029=100\00235=D\00211=12345\00240=1\00254=1\00238=5000\00260=2003061501:14:49\00210=127";
+
+    static final String LOGON = "8=FIX.4.2\0029=73\00235=A\00234=1\00249=CLIENT\00252=20181119-10:42:48.768\00256=SERVER\00298=0\002108=30\002141=Y\00210=208";
+    static final String NEW_ORDER_SINGLE_1 = "8=FIX.4.2\0029=251\00235=D\00249=AFUNDMGR\00256=ABROKER\00234=2\00252=20030615-01:14:49\002" +
+            "11=12345\0021=111111\00263=0\00264=20030621\00221=3\002110=1000\002111=50000\00255=IBM\00248=459200101\00222=1" +
+            "\00254=1\00260=2003061501:14:49\00238=5000\00240=1\00244=15.75\00215=USD\00259=0\00210=127";
 
     @BeforeEach
     void setUp() {
@@ -19,9 +29,9 @@ class FixMessageParserTest {
 
     @Test
     void testFixNewOrderSingletoJson() throws IOException, FixMessageParser.ParseException {
-        final String input = FixMessage.NEW_ORDER_SINGLE;
+        final String input = NEW_ORDER_SINGLE;
 
-        Dom4JReaderUtils.resource = "src\\FIX.xml";
+        //Dom4JReaderUtils.resource = "src\\FIX.xml";
 
         final String expected = "{\n" +
                 "\t\"BeginString\":\"FIX.4.4\",\n" +
@@ -35,17 +45,20 @@ class FixMessageParserTest {
                 "\t\"CheckSum\":\"127\"\n" +
                 "}";
 
-        FixMessageWriter writer = new JsonFixMessageWriter();
-        parser.parse(input, writer);
-
-        Truth.assertThat(((JsonFixMessageWriter) writer).getFormatJson()).isEqualTo(expected);
+        JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+        JsonFixMessageWriter writer = new JsonFixMessageWriter(jsonBuilder);
+        String resource = "src\\FIX.xml";
+        parser.parse(input, writer, Collections.emptyMap(),resource);
+        JsonObject jsonObject = jsonBuilder.build();
+        String jsonString = JsonFormatUtils.jsonObject2prettyString(jsonObject);
+        Truth.assertThat(jsonString).isEqualTo(expected);
     }
 
     @Test
     void testFixNewOrderSingletoString() throws Exception {
-        final String input = FixMessage.NEW_ORDER_SINGLE;
+        final String input = NEW_ORDER_SINGLE;
 
-        Dom4JReaderUtils.resource = "src\\FIX.xml";
+        //Dom4JReaderUtils.resource = "src\\FIX.xml";
 
         final String expected = "BeginString => FIX.4.4\r\n" +
                 "BodyLength => 100\r\n" +
@@ -57,23 +70,18 @@ class FixMessageParserTest {
                 "TransactTime => 2003061501:14:49\r\n" +
                 "CheckSum => 127\r\n";
 
-        FixMessageWriter writer = new SimpleFixMessageWriter();
-        parser.parse(input, writer);
+        StringBuilder sb = new StringBuilder();
+        String resource = "src\\FIX.xml";
+        SimpleFixMessageWriter writer = new SimpleFixMessageWriter(sb);
+        parser.parse(input, writer, Collections.emptyMap(),resource);
 
-        Truth.assertThat(((SimpleFixMessageWriter) writer).getSb().toString()).isEqualTo(expected);
+        Truth.assertThat(sb.toString()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {FixMessage.NEW_ORDER_SINGLE, FixMessage.NEW_ORDER_SINGLE_1})
+    @ValueSource(strings = {NEW_ORDER_SINGLE, NEW_ORDER_SINGLE_1, LOGON})
     void testSplitMessage(String message) throws FixMessageParser.ParseException {
         System.out.println(FIXMessageHandling.splitMessage(message));
-    }
-
-    @Test
-    void testJsonFormat(){
-        String str = "{\"content\":\"this is the msg content.\",\"tousers\":\"user1|user2\",\"msgtype\":\"texturl\",\"appkey\":\"test\",\"domain\":\"test\","
-                + "\"system\":{\"wechat\":{\"safe\":\"1\"}},\"texturl\":{\"urltype\":\"0\",\"user1\":{\"spStatus\":\"user01\",\"workid\":\"work01\"},\"user2\":{\"spStatus\":\"user02\",\"workid\":\"work02\"}}}";
-        System.out.println(JsonFormatUtils.formatJson(str));
     }
 
     @Test
@@ -86,13 +94,16 @@ class FixMessageParserTest {
 
         for (String s : input) {
 
-            FixMessageWriter writer = new JsonFixMessageWriter();
-
+            StringBuilder sb = new StringBuilder();
+            SimpleFixMessageWriter writer = new SimpleFixMessageWriter(sb);
+            String resource = "src\\FIX.xml";
             Assertions.assertThrows(
                     FixMessageParser.ParseException.class,
-                    () -> parser.parse(s, writer)
+                    () -> parser.parse(s, writer, Collections.emptyMap(), resource)
             );
         }
 
     }
+
+
 }

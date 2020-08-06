@@ -8,9 +8,7 @@ import java.io.File;
 
 class Dom4JReaderUtils {
 
-    static String resource = "";
-
-    static Document getDocument() {
+    static Document getDocument(String resource) {
 
         Document document = null;
         SAXReader reader = new SAXReader();
