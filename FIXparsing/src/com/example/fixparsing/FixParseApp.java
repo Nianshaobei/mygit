@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
-@Command(description = "Parse FIX messages to file.",
+@Command(name = "fixApp", description = "Parse FIX messages to file.",
         mixinStandardHelpOptions = true, version = "4.1.3")
-public class Main implements Callable<Integer> {
+public class FixParseApp implements Callable<Integer> {
 
     @Option(names = {"-f", "--file"}, description = "Configuration file path")
     String configFilePath;
@@ -33,6 +33,7 @@ public class Main implements Callable<Integer> {
 
         FixMessageParser parser = new StdFixMessageParser();
 
+        System.out.println("Type the FIX messages by line. Enter 'Q' to exit.");
         Scanner sc = new Scanner(System.in);
         List<String> inputList = new ArrayList<>();
         String s;
@@ -59,54 +60,60 @@ public class Main implements Callable<Integer> {
                 String jsonString = JsonFormatUtils.jsonObject2prettyString(jsonObject);
                 outputJson.add(jsonString);
             }
+
+            try {
+                if (simpleFile != null) {
+                    File file1 = new File(simpleFile);
+                    if (!file1.exists()) {
+                        file1.createNewFile();
+                    }
+                    OutputStream os1 = new FileOutputStream(file1);
+                    for (String output : outputString) {
+                        String newLine = System.getProperty("line.separator");
+                        os1.write(output.getBytes());
+                        os1.write(newLine.getBytes());
+                    }
+                    os1.close();
+                    System.out.println("File " + simpleFile + " is generated.");
+                } else {
+                    System.out.println("The results in simple format are as follows:");
+                    for (String output : outputString) {
+                        System.out.println(output);
+                    }
+                }
+
+                if (jsonFile != null) {
+                    File file2 = new File(jsonFile);
+                    if (!file2.exists()) {
+                        file2.createNewFile();
+                    }
+                    OutputStream os2 = new FileOutputStream(file2);
+                    for (String output : outputJson) {
+                        os2.write(output.getBytes());
+                    }
+                    os2.close();
+                    System.out.println("File " + jsonFile + " is generated.");
+                } else {
+                    System.out.println("The results in json format are as follows:");
+                    for (String output : outputJson) {
+                        System.out.println(output);
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         } else {
-            System.out.println("Please enter configuration file path");
+            System.out.println("Please enter configuration file path.");
         }
 
-        try {
-            if (simpleFile != null) {
-                File file1 = new File(simpleFile);
-                if (!file1.exists()) {
-                    file1.createNewFile();
-                }
-                OutputStream os1 = new FileOutputStream(file1);
-                for (String output : outputString) {
-                    String newLine = System.getProperty("line.separator");
-                    os1.write(output.getBytes());
-                    os1.write(newLine.getBytes());
-                }
-                os1.close();
-            } else {
-                for (String output : outputString) {
-                    System.out.println(output);
-                }
-            }
-
-            if (jsonFile != null) {
-                File file2 = new File(jsonFile);
-                if (!file2.exists()) {
-                    file2.createNewFile();
-                }
-                OutputStream os2 = new FileOutputStream(file2);
-                for (String output : outputJson) {
-                    os2.write(output.getBytes());
-                }
-                os2.close();
-            } else {
-                for (String output : outputJson) {
-                    System.out.println(output);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         return 0;
     }
 
     public static void main(String[] args) {
-        System.exit(new CommandLine(new Main()).execute(args));
+        System.exit(new CommandLine(new FixParseApp()).execute(args));
     }
 
 }

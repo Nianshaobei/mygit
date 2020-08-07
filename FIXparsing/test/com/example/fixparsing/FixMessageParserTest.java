@@ -31,18 +31,17 @@ class FixMessageParserTest {
     void testFixNewOrderSingletoJson() throws IOException, FixMessageParser.ParseException {
         final String input = NEW_ORDER_SINGLE;
 
-        //Dom4JReaderUtils.resource = "src\\FIX.xml";
-
-        final String expected = "{\n" +
-                "\t\"BeginString\":\"FIX.4.4\",\n" +
-                "\t\"BodyLength\":\"100\",\n" +
-                "\t\"MsgType\":\"ORDER_SINGLE\",\n" +
-                "\t\"ClOrdID\":\"12345\",\n" +
-                "\t\"OrdType\":\"MARKET\",\n" +
-                "\t\"Side\":\"BUY\",\n" +
-                "\t\"OrderQty\":\"5000\",\n" +
-                "\t\"TransactTime\":\"2003061501:14:49\",\n" +
-                "\t\"CheckSum\":\"127\"\n" +
+        final String expected = "\n" +
+                "{\n" +
+                "    \"BeginString\":\"FIX.4.4\",\n" +
+                "    \"BodyLength\":\"100\",\n" +
+                "    \"MsgType\":\"ORDER_SINGLE\",\n" +
+                "    \"ClOrdID\":\"12345\",\n" +
+                "    \"OrdType\":\"MARKET\",\n" +
+                "    \"Side\":\"BUY\",\n" +
+                "    \"OrderQty\":\"5000\",\n" +
+                "    \"TransactTime\":\"2003061501:14:49\",\n" +
+                "    \"CheckSum\":\"127\"\n" +
                 "}";
 
         JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
