@@ -19,8 +19,7 @@ public interface FixMessageParser {
     default void parse(
             @Nullable final String input,
             final FixMessageWriter writer,
-            final Map<Integer, FixTagTranslator> customTagTranslators,
-            final String resource
+            final Map<Integer, FixTagTranslator> customTagTranslators
     ) throws ParseException, IOException {
         throw new UnsupportedOperationException("Not implemented yet");
     }

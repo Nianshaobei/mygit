@@ -1,6 +1,7 @@
 package com.example.fixparsing;
 
 import com.google.common.collect.Maps;
+import org.apache.log4j.Logger;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class XmlParserUtils {
+
+    private static Logger logger = Logger.getLogger(XmlParserUtils.class);
 
     private static Map<Integer, FixTagTranslator> xmlParser(String resource) {
         Map<Integer, FixTagTranslator> map = Maps.newHashMap();
@@ -70,7 +73,7 @@ public class XmlParserUtils {
                 }
                 map.put(tagint, fixTagTranslator);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                logger.error("Failed to convert integer type.",e);
             }
 
         }

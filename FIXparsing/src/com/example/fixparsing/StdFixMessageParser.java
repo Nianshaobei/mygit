@@ -1,22 +1,22 @@
 package com.example.fixparsing;
 
+import org.apache.log4j.Logger;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Map;
 
 class StdFixMessageParser implements FixMessageParser {
 
+    private static Logger logger = Logger.getLogger(StdFixMessageParser.class);
+
     @Override
     public void parse(
             @Nullable final String input,
             final FixMessageWriter writer,
-            final Map<Integer, FixTagTranslator> customTagTranslators,
-            final String resource
+            final Map<Integer, FixTagTranslator> customTagTranslators
     ) throws ParseException, IOException {
         // TODO add implementation here
-
-        final Map<Integer, FixTagTranslator> builtinTranslators = XmlParserUtils.loadBuiltinTranslators(resource);
-        builtinTranslators.putAll(customTagTranslators);
 
         assert input != null;
         Map<String, String> tagvalue = FIXMessageHandling.splitMessage(input);
@@ -29,15 +29,15 @@ class StdFixMessageParser implements FixMessageParser {
             try {
                 int keyint = Integer.parseInt(key);
 
-                if (builtinTranslators.get(keyint) != null) {
-                    tagTrans = builtinTranslators.get(keyint).getName();
-                    valueTrans = builtinTranslators.get(keyint).translateValue(val);
+                if (customTagTranslators.get(keyint) != null) {
+                    tagTrans = customTagTranslators.get(keyint).getName();
+                    valueTrans = customTagTranslators.get(keyint).translateValue(val);
                 }
 
                 writer.write(tagTrans, valueTrans);
 
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                logger.error("Failed to convert integer type.",e);
             }
 
         }

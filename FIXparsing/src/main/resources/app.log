@@ -1,0 +1,83 @@
+[DEBUG][2020-08-11 10:26:37,574][java.lang.Class]debug...
+[ERROR][2020-08-11 10:26:37,577][java.lang.Class]error...
+[DEBUG][2020-08-11 10:27:38,596][java.lang.Class]debug...
+[ERROR][2020-08-11 10:27:38,600][java.lang.Class]error...
+[INFO][2020-08-11 10:27:38,600][java.lang.Class]nihaoa!
+[DEBUG][2020-08-11 10:28:25,786][com.example.fixparsing.Hello] This is debug!!!
+[INFO][2020-08-11 10:28:25,790][com.example.fixparsing.Hello] This is info!!!
+[WARN][2020-08-11 10:28:25,791][com.example.fixparsing.Hello] This is warn!!!
+[ERROR][2020-08-11 10:28:25,791][com.example.fixparsing.Hello] This is error!!!
+[FATAL][2020-08-11 10:28:25,791][com.example.fixparsing.Hello] This is fatal!!!
+[INFO][2020-08-11 10:36:52,365][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 10:37:48,928][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-11 10:38:29,476][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 10:38:33,155][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-11 10:38:33,159][com.example.fixparsing.FixParseApp]BeginString => FIX.4.4
+BodyLength => 100
+MsgType => ORDER_SINGLE
+ClOrdID => 12345
+OrdType => MARKET
+Side => BUY
+OrderQty => 5000
+TransactTime => 2003061501:14:49
+CheckSum => 127
+
+[INFO][2020-08-11 10:38:33,159][com.example.fixparsing.FixParseApp]BeginString => FIX.4.2
+BodyLength => 73
+MsgType => LOGON
+MsgSeqNum => 1
+SenderCompID => CLIENT
+SendingTime => 20181119-10:42:48.768
+TargetCompID => SERVER
+EncryptMethod => NONE_OTHER
+HeartBtInt => 30
+ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
+CheckSum => 208
+
+[INFO][2020-08-11 10:41:08,567][com.example.fixparsing.FixParseApp]Cannot parse without configuration file!>_<
+Please enter configuration file path!
+[INFO][2020-08-11 10:42:10,490][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 10:42:14,419][com.example.fixparsing.FixParseApp]File simple.txt is generated.
+[INFO][2020-08-11 15:43:16,543][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 15:43:55,172][com.example.fixparsing.FixParseApp]Cannot parse without configuration file!>_<
+Please enter configuration file path!
+[INFO][2020-08-11 15:44:06,410][com.example.fixparsing.FixParseApp]Cannot parse without configuration file!>_<
+Please enter configuration file path!
+[INFO][2020-08-11 15:44:37,242][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 15:44:41,497][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-11 15:44:41,499][com.example.fixparsing.FixParseApp]BeginString => FIX.4.4
+BodyLength => 100
+MsgType => ORDER_SINGLE
+ClOrdID => 12345
+OrdType => MARKET
+Side => BUY
+OrderQty => 5000
+TransactTime => 2003061501:14:49
+CheckSum => 127
+
+[INFO][2020-08-11 15:44:41,500][com.example.fixparsing.FixParseApp]BeginString => FIX.4.2
+BodyLength => 73
+MsgType => LOGON
+MsgSeqNum => 1
+SenderCompID => CLIENT
+SendingTime => 20181119-10:42:48.768
+TargetCompID => SERVER
+EncryptMethod => NONE_OTHER
+HeartBtInt => 30
+ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
+CheckSum => 208
+
+[INFO][2020-08-11 16:10:22,475][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 16:10:44,102][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-11 16:10:44,107][com.example.fixparsing.FixParseApp]BeginString => FIX.4.2
+BodyLength => 73
+MsgType => LOGON
+MsgSeqNum => 1
+SenderCompID => CLIENT
+SendingTime => 20181119-10:42:48.768
+TargetCompID => SERVER
+EncryptMethod => NONE_OTHER
+HeartBtInt => 30
+ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
+CheckSum => 208
+

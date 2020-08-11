@@ -1,5 +1,8 @@
 package com.example.fixparsing;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Files;
+import org.apache.log4j.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -7,13 +10,15 @@ import picocli.CommandLine.Option;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonWriter;
+import javax.json.stream.JsonGenerator;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
@@ -28,86 +33,79 @@ public class FixParseApp implements Callable<Integer> {
     @Option(names = {"-s", "--simple"}, description = "Simple output file name")
     String simpleFile;
 
+    private static Logger logger = Logger.getLogger(FixParseApp.class);
+
     @Override
     public Integer call() throws Exception {
 
-        FixMessageParser parser = new StdFixMessageParser();
-
-        System.out.println("Type the FIX messages by line. Enter 'Q' to exit.");
-        Scanner sc = new Scanner(System.in);
-        List<String> inputList = new ArrayList<>();
-        String s;
-        while (!(s = sc.nextLine()).equals("Q")) {
-            inputList.add(s);
-        }
-        sc.close();
-
-        List<String> outputString = new ArrayList<>();
-        List<String> outputJson = new ArrayList<>();
         if (configFilePath != null) {
-            for (String input : inputList) {
-                //Print result as string
-                StringBuilder sb = new StringBuilder();
-                SimpleFixMessageWriter writeToString = new SimpleFixMessageWriter(sb);
-                parser.parse(input, writeToString, Collections.emptyMap(), configFilePath);
-                outputString.add(sb.toString());
+            FixMessageParser parser = new StdFixMessageParser();
+            final Map<Integer, FixTagTranslator> loadedTranslators = XmlParserUtils.loadBuiltinTranslators(configFilePath);
 
-                //Save result as json object to file
-                JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
-                JsonFixMessageWriter writerToFile = new JsonFixMessageWriter(jsonBuilder);
-                parser.parse(input, writerToFile, Collections.emptyMap(), configFilePath);
-                JsonObject jsonObject = jsonBuilder.build();
-                String jsonString = JsonFormatUtils.jsonObject2prettyString(jsonObject);
-                outputJson.add(jsonString);
+            logger.info("Type the FIX messages by line. Enter 'Q' to exit.");
+            Scanner sc = new Scanner(System.in);
+            List<String> inputList = new ArrayList<>();
+            String s;
+            while (!(s = sc.nextLine()).equals("Q")) {
+                inputList.add(s);
             }
+            sc.close();
 
-            try {
-                if (simpleFile != null) {
-                    File file1 = new File(simpleFile);
-                    if (!file1.exists()) {
-                        file1.createNewFile();
+            if (null == simpleFile && null == jsonFile) {
+                logger.info("The results in simple format are as follows:");
+                for (String input : inputList) {
+                    try (final StringWriter writer = new StringWriter()) {
+                        SimpleFixMessageWriter writeToString = new SimpleFixMessageWriter(writer);
+                        parser.parse(input, writeToString, loadedTranslators);
+                        logger.info(writer);
                     }
-                    OutputStream os1 = new FileOutputStream(file1);
-                    for (String output : outputString) {
-                        String newLine = System.getProperty("line.separator");
-                        os1.write(output.getBytes());
-                        os1.write(newLine.getBytes());
+                }
+            } else {
+
+                if (null != simpleFile) {
+                    // TODO write to file
+                    final File f = new File(simpleFile);
+                    try (final BufferedWriter writer = Files.newWriter(f, StandardCharsets.UTF_8)) {
+                        for (String input : inputList) {
+                            SimpleFixMessageWriter writeToString = new SimpleFixMessageWriter(writer);
+                            parser.parse(input, writeToString, loadedTranslators);
+                            writer.write(System.lineSeparator());
+                        }
                     }
-                    os1.close();
-                    System.out.println("File " + simpleFile + " is generated.");
-                } else {
-                    System.out.println("The results in simple format are as follows:");
-                    for (String output : outputString) {
-                        System.out.println(output);
+                    logger.info("File " + simpleFile + " is generated.");
+                }
+
+                if (null != jsonFile) {
+                    // TODO write to file
+                    final File f = new File(jsonFile);
+                    try (final BufferedWriter writer = Files.newWriter(f, StandardCharsets.UTF_8)) {
+                        for (String input : inputList) {
+                            JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+                            JsonFixMessageWriter writerToFile = new JsonFixMessageWriter(jsonBuilder);
+                            parser.parse(input, writerToFile, loadedTranslators);
+                            final JsonObject jsonObject = jsonBuilder.build();
+
+                            final Map<String, Boolean> map = ImmutableMap.of(
+                                    JsonGenerator.PRETTY_PRINTING, Boolean.TRUE
+                            );
+                            try (final StringWriter stringWriter = new StringWriter();
+                                 final JsonWriter jsonWriter = Json.createWriterFactory(map).createWriter(stringWriter)) {
+                                if (jsonWriter != null) {
+                                    jsonWriter.write(jsonObject);
+                                }
+                                writer.write(String.valueOf(stringWriter));
+                                writer.write(System.lineSeparator());
+                            }
+                        }
+                        logger.info("File " + jsonFile + " is generated.");
                     }
                 }
 
-                if (jsonFile != null) {
-                    File file2 = new File(jsonFile);
-                    if (!file2.exists()) {
-                        file2.createNewFile();
-                    }
-                    OutputStream os2 = new FileOutputStream(file2);
-                    for (String output : outputJson) {
-                        os2.write(output.getBytes());
-                    }
-                    os2.close();
-                    System.out.println("File " + jsonFile + " is generated.");
-                } else {
-                    System.out.println("The results in json format are as follows:");
-                    for (String output : outputJson) {
-                        System.out.println(output);
-                    }
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
         } else {
-            System.out.println("Please enter configuration file path.");
+            logger.info("Cannot parse without configuration file!>_<" + System.lineSeparator() + "Please enter configuration file path!");
         }
-
 
         return 0;
     }
@@ -115,5 +113,4 @@ public class FixParseApp implements Callable<Integer> {
     public static void main(String[] args) {
         System.exit(new CommandLine(new FixParseApp()).execute(args));
     }
-
 }

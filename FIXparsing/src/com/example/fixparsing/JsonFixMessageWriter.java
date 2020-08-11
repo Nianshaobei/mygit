@@ -14,7 +14,6 @@ public class JsonFixMessageWriter implements FixMessageWriter {
     }
 
     JsonFixMessageWriter(JsonObjectBuilder jsonBuilder) {
-
         this.jsonBuilder = jsonBuilder;
     }
 
