@@ -29,7 +29,7 @@ class StdFixMessageParser implements FixMessageParser {
             try {
                 int keyint = Integer.parseInt(key);
 
-                if (customTagTranslators.get(keyint) != null) {
+                if (null != customTagTranslators.get(keyint)) {
                     tagTrans = customTagTranslators.get(keyint).getName();
                     valueTrans = customTagTranslators.get(keyint).translateValue(val);
                 }
@@ -37,7 +37,7 @@ class StdFixMessageParser implements FixMessageParser {
                 writer.write(tagTrans, valueTrans);
 
             } catch (NumberFormatException e) {
-                logger.error("Failed to convert integer type.",e);
+                logger.error("Failed to convert integer type.", e);
             }
 
         }

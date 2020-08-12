@@ -81,3 +81,6 @@ HeartBtInt => 30
 ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
 CheckSum => 208
 
+[INFO][2020-08-11 16:52:47,088][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 16:53:13,995][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-11 16:53:30,987][com.example.fixparsing.FixParseApp]File json.txt is generated.

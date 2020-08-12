@@ -50,7 +50,7 @@ public class XmlParserUtils {
 
                         @Override
                         public String translateValue(String value) {
-                            if (valueMap.get(value) != null) {
+                            if (null != valueMap.get(value)) {
                                 return valueMap.get(value);
                             }
                             return "Unknown";
@@ -73,7 +73,7 @@ public class XmlParserUtils {
                 }
                 map.put(tagint, fixTagTranslator);
             } catch (NumberFormatException e) {
-                logger.error("Failed to convert integer type.",e);
+                logger.error("Failed to convert integer type.", e);
             }
 
         }
@@ -81,8 +81,7 @@ public class XmlParserUtils {
     }
 
     static Map<Integer, FixTagTranslator> loadBuiltinTranslators(String resource) {
-        Map<Integer, FixTagTranslator> map = xmlParser(resource);
-        return map;
+        return xmlParser(resource);
     }
 
 }

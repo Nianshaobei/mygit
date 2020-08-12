@@ -90,7 +90,7 @@ public class FixParseApp implements Callable<Integer> {
                             );
                             try (final StringWriter stringWriter = new StringWriter();
                                  final JsonWriter jsonWriter = Json.createWriterFactory(map).createWriter(stringWriter)) {
-                                if (jsonWriter != null) {
+                                if (null != jsonWriter) {
                                     jsonWriter.write(jsonObject);
                                 }
                                 writer.write(String.valueOf(stringWriter));
