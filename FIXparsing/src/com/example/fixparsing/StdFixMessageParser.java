@@ -18,29 +18,35 @@ class StdFixMessageParser implements FixMessageParser {
     ) throws ParseException, IOException {
         // TODO add implementation here
 
-        assert input != null;
-        Map<String, String> tagvalue = FIXMessageHandling.splitMessage(input);
+        if (null != input) {
+            Map<String, String> tagvalue = FIXMessageHandling.splitMessage(input);
 
-        for (Map.Entry<String, String> entry : tagvalue.entrySet()) {
-            final String key = entry.getKey();
-            final String val = entry.getValue();
-            String tagTrans = "", valueTrans = "";
+            for (Map.Entry<String, String> entry : tagvalue.entrySet()) {
+                final String key = entry.getKey();
+                final String val = entry.getValue();
+                String tagTrans;
+                String valueTrans;
 
-            try {
-                int keyint = Integer.parseInt(key);
+                try {
+                    int keyint = Integer.parseInt(key);
 
-                if (null != customTagTranslators.get(keyint)) {
-                    tagTrans = customTagTranslators.get(keyint).getName();
-                    valueTrans = customTagTranslators.get(keyint).translateValue(val);
+                    if (null != customTagTranslators.get(keyint)) {
+                        tagTrans = customTagTranslators.get(keyint).getName();
+                        valueTrans = customTagTranslators.get(keyint).translateValue(val);
+                    } else {
+                        tagTrans = key;
+                        valueTrans = val;
+                    }
+
+                    writer.write(tagTrans, valueTrans);
+
+                } catch (NumberFormatException e) {
+                    logger.error("Failed to convert integer type.", e);
                 }
 
-                writer.write(tagTrans, valueTrans);
-
-            } catch (NumberFormatException e) {
-                logger.error("Failed to convert integer type.", e);
             }
-
         }
+
     }
 
 }

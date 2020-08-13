@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.xml.sax.SAXException;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,9 +14,11 @@ import java.util.Map;
 
 public class XmlParserUtils {
 
+    XmlParserUtils(){}
+
     private static Logger logger = Logger.getLogger(XmlParserUtils.class);
 
-    private static Map<Integer, FixTagTranslator> xmlParser(String resource) {
+    private static Map<Integer, FixTagTranslator> xmlParser(String resource) throws SAXException {
         Map<Integer, FixTagTranslator> map = Maps.newHashMap();
 
         Document document = Dom4JReaderUtils.getDocument(resource);
@@ -80,7 +83,7 @@ public class XmlParserUtils {
         return map;
     }
 
-    static Map<Integer, FixTagTranslator> loadBuiltinTranslators(String resource) {
+    static Map<Integer, FixTagTranslator> loadBuiltinTranslators(String resource) throws SAXException {
         return xmlParser(resource);
     }
 

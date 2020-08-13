@@ -2,11 +2,13 @@ package com.example.fixparsing;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.xml.sax.SAXException;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -42,7 +44,7 @@ class FixMessageParserTest {
     }
 
     @Test
-    void testFixNewOrderSingletoJson() throws IOException, FixMessageParser.ParseException {
+    void testFixNewOrderSingletoJson() throws IOException, FixMessageParser.ParseException, SAXException {
 
         final String expected = "\n" +
                 "{\n" +
@@ -103,20 +105,13 @@ class FixMessageParserTest {
     @ParameterizedTest
     @ValueSource(strings = {NEW_ORDER_SINGLE, NEW_ORDER_SINGLE_1, LOGON, INPUT_1})
     void testSplitMessage(String message) throws FixMessageParser.ParseException {
-        System.out.println(FIXMessageHandling.splitMessage(message));
+        Assert.assertNotNull(FIXMessageHandling.splitMessage(message));
     }
 
     @Test
-    void test() throws FixMessageParser.ParseException {
-        String split1 = FIXMessageHandling.getSplitSymbol(INPUT_1);
-        System.out.println(split1);
-        StringBuilder split2 = new StringBuilder();
-        split2.append("\\").append(split1);
-        String[] arrsplit = INPUT_1.split(split2.toString());
-        for(String a : arrsplit){
-            System.out.println(a);
-        }
-
+    void testGetMatchSymbol() {
+        String input = "8==FIXT.4.4";
+        Truth.assertThat(FIXMessageHandling.getMatchSymbol(input)).isEqualTo("\\==");
     }
 
     @Test

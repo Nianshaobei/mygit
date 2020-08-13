@@ -38,73 +38,73 @@ public class FixParseApp implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
 
-        if (configFilePath != null) {
-            FixMessageParser parser = new StdFixMessageParser();
-            final Map<Integer, FixTagTranslator> loadedTranslators = XmlParserUtils.loadBuiltinTranslators(configFilePath);
+        if (configFilePath == null) {
+            logger.info("Cannot parse without configuration file!>_<" + System.lineSeparator() + "Please enter configuration file path!");
+            return 0;
+        }
 
-            logger.info("Type the FIX messages by line. Enter 'Q' to exit.");
-            Scanner sc = new Scanner(System.in);
-            List<String> inputList = new ArrayList<>();
-            String s;
-            while (!(s = sc.nextLine()).equals("Q")) {
-                inputList.add(s);
+        FixMessageParser parser = new StdFixMessageParser();
+        final Map<Integer, FixTagTranslator> loadedTranslators = XmlParserUtils.loadBuiltinTranslators(configFilePath);
+
+        logger.info("Type the FIX messages by line. Enter 'Q' to exit.");
+        Scanner sc = new Scanner(System.in);
+        List<String> inputList = new ArrayList<>();
+        String s;
+        while (!(s = sc.nextLine()).equals("Q")) {
+            inputList.add(s);
+        }
+        sc.close();
+
+        if (null == simpleFile && null == jsonFile) {
+            logger.info("The results in simple format are as follows:");
+            for (String input : inputList) {
+                try (final StringWriter writer = new StringWriter()) {
+                    SimpleFixMessageWriter writeToString = new SimpleFixMessageWriter(writer);
+                    parser.parse(input, writeToString, loadedTranslators);
+                    logger.info(writer);
+                }
             }
-            sc.close();
+        } else {
 
-            if (null == simpleFile && null == jsonFile) {
-                logger.info("The results in simple format are as follows:");
-                for (String input : inputList) {
-                    try (final StringWriter writer = new StringWriter()) {
+            if (null != simpleFile) {
+                // TODO write to file
+                final File f = new File(simpleFile);
+                try (final BufferedWriter writer = Files.newWriter(f, StandardCharsets.UTF_8)) {
+                    for (String input : inputList) {
                         SimpleFixMessageWriter writeToString = new SimpleFixMessageWriter(writer);
                         parser.parse(input, writeToString, loadedTranslators);
-                        logger.info(writer);
+                        writer.write(System.lineSeparator());
                     }
                 }
-            } else {
+                logger.info("File " + simpleFile + " is generated.");
+            }
 
-                if (null != simpleFile) {
-                    // TODO write to file
-                    final File f = new File(simpleFile);
-                    try (final BufferedWriter writer = Files.newWriter(f, StandardCharsets.UTF_8)) {
-                        for (String input : inputList) {
-                            SimpleFixMessageWriter writeToString = new SimpleFixMessageWriter(writer);
-                            parser.parse(input, writeToString, loadedTranslators);
+            if (null != jsonFile) {
+                // TODO write to file
+                final File f = new File(jsonFile);
+                try (final BufferedWriter writer = Files.newWriter(f, StandardCharsets.UTF_8)) {
+                    for (String input : inputList) {
+                        JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+                        JsonFixMessageWriter writerToFile = new JsonFixMessageWriter(jsonBuilder);
+                        parser.parse(input, writerToFile, loadedTranslators);
+                        final JsonObject jsonObject = jsonBuilder.build();
+
+                        final Map<String, Boolean> map = ImmutableMap.of(
+                                JsonGenerator.PRETTY_PRINTING, Boolean.TRUE
+                        );
+                        try (final StringWriter stringWriter = new StringWriter();
+                             final JsonWriter jsonWriter = Json.createWriterFactory(map).createWriter(stringWriter)) {
+                            if (null != jsonWriter) {
+                                jsonWriter.write(jsonObject);
+                            }
+                            writer.write(String.valueOf(stringWriter));
                             writer.write(System.lineSeparator());
                         }
                     }
-                    logger.info("File " + simpleFile + " is generated.");
+                    logger.info("File " + jsonFile + " is generated.");
                 }
-
-                if (null != jsonFile) {
-                    // TODO write to file
-                    final File f = new File(jsonFile);
-                    try (final BufferedWriter writer = Files.newWriter(f, StandardCharsets.UTF_8)) {
-                        for (String input : inputList) {
-                            JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
-                            JsonFixMessageWriter writerToFile = new JsonFixMessageWriter(jsonBuilder);
-                            parser.parse(input, writerToFile, loadedTranslators);
-                            final JsonObject jsonObject = jsonBuilder.build();
-
-                            final Map<String, Boolean> map = ImmutableMap.of(
-                                    JsonGenerator.PRETTY_PRINTING, Boolean.TRUE
-                            );
-                            try (final StringWriter stringWriter = new StringWriter();
-                                 final JsonWriter jsonWriter = Json.createWriterFactory(map).createWriter(stringWriter)) {
-                                if (null != jsonWriter) {
-                                    jsonWriter.write(jsonObject);
-                                }
-                                writer.write(String.valueOf(stringWriter));
-                                writer.write(System.lineSeparator());
-                            }
-                        }
-                        logger.info("File " + jsonFile + " is generated.");
-                    }
-                }
-
             }
 
-        } else {
-            logger.info("Cannot parse without configuration file!>_<" + System.lineSeparator() + "Please enter configuration file path!");
         }
 
         return 0;

@@ -84,3 +84,233 @@ CheckSum => 208
 [INFO][2020-08-11 16:52:47,088][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
 [INFO][2020-08-11 16:53:13,995][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
 [INFO][2020-08-11 16:53:30,987][com.example.fixparsing.FixParseApp]File json.txt is generated.
+[INFO][2020-08-13 10:29:45,627][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 10:30:03,038][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 10:30:03,045][com.example.fixparsing.FixParseApp]BeginString => FIXT.1.1
+BodyLength => 402
+MsgType => EXECUTION_REPORT
+SenderCompID => FGW
+TargetCompID => 123
+MsgSeqNum => 13939
+SendingTime => 20171013-10:56:41.008
+ApplVerID => Unknown
+OnBehalfOfCompID => 21146
+ExecID => E0XF1VrQVLRK
+ClOrdID => 20171013162640993
+OrderID => O0XF1ahT51rY
+MultiLegReportingType => 1
+ExecType => EXPIRED
+OrdStatus => EXPIRED
+Text => Expired (Price to convert breaches Price Bands)
+LeavesQty => 0
+CumQty => 0
+Symbol => COTTON14OCT17CE17414FNOV17
+NoPartyIDs => 3
+PartyID => 123451234512345
+PartyIDSource => PROPRIETARY
+PartyRole => Unknown
+OrdType => Unknown
+TimeInForce => DAY
+Side => BUY
+OrderQty => 50
+DisplayQty => 0
+TransactTime => 20171013-10:56:40.989
+1180 => 1
+30001 => 1
+AccountType => HOUSE_TRADER
+22009 => 28649
+CheckSum => 074
+
+[INFO][2020-08-13 15:30:52,125][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:30:54,792][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:30:54,797][com.example.fixparsing.FixParseApp]BeginString => FIXT.1.1
+BodyLength => 402
+MsgType => EXECUTION_REPORT
+SenderCompID => FGW
+TargetCompID => 123
+MsgSeqNum => 13939
+SendingTime => 20171013-10:56:41.008
+ApplVerID => Unknown
+OnBehalfOfCompID => 21146
+ExecID => E0XF1VrQVLRK
+ClOrdID => 20171013162640993
+OrderID => O0XF1ahT51rY
+MultiLegReportingType => 1
+ExecType => EXPIRED
+OrdStatus => EXPIRED
+Text => Expired (Price to convert breaches Price Bands)
+LeavesQty => 0
+CumQty => 0
+Symbol => COTTON14OCT17CE17414FNOV17
+NoPartyIDs => 3
+PartyID => 123451234512345
+PartyIDSource => PROPRIETARY
+PartyRole => Unknown
+OrdType => Unknown
+TimeInForce => DAY
+Side => BUY
+OrderQty => 50
+DisplayQty => 0
+TransactTime => 20171013-10:56:40.989
+1180 => 1
+30001 => 1
+AccountType => HOUSE_TRADER
+22009 => 28649
+CheckSum => 074
+
+[INFO][2020-08-13 15:42:28,463][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:42:44,080][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:50:36,647][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:50:51,422][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:50:51,428][com.example.fixparsing.FixParseApp]BeginString => FIX.4.4
+BodyLength => 100
+MsgType => ORDER_SINGLE
+ClOrdID => 12345
+OrdType => MARKET
+Side => BUY
+OrderQty => 5000
+TransactTime => 2003061501:14:49
+CheckSum => 127";
+
+[INFO][2020-08-13 15:51:03,575][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:51:15,868][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:52:55,595][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:52:58,575][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:54:03,800][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:54:09,954][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:54:09,959][com.example.fixparsing.FixParseApp]BeginString => FIX.4.2
+BodyLength => 73
+MsgType => LOGON
+MsgSeqNum => 1
+SenderCompID => CLIENT
+SendingTime => 20181119-10:42:48.768
+TargetCompID => SERVER
+EncryptMethod => NONE_OTHER
+HeartBtInt => 30
+ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
+CheckSum => 208
+
+[INFO][2020-08-13 15:54:34,226][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:54:36,760][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:54:36,764][com.example.fixparsing.FixParseApp]BeginString => FIX.4.2
+BodyLength => 73
+MsgType => LOGON
+MsgSeqNum => 1
+SenderCompID => CLIENT
+SendingTime => 20181119-10:42:48.768
+TargetCompID => SERVER
+EncryptMethod => NONE_OTHER
+HeartBtInt => 30
+ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
+CheckSum => 208
+
+[INFO][2020-08-13 15:56:37,952][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:56:40,703][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:56:40,710][com.example.fixparsing.FixParseApp]BeginString => FIX.4.2
+BodyLength => 73
+MsgType => LOGON
+MsgSeqNum => 1
+SenderCompID => CLIENT
+SendingTime => 20181119-10:42:48.768
+TargetCompID => SERVER
+EncryptMethod => NONE_OTHER
+HeartBtInt => 30
+ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
+CheckSum => 208
+
+[INFO][2020-08-13 15:57:33,349][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:57:35,558][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:57:35,562][com.example.fixparsing.FixParseApp]BeginString => FIX.4.2
+BodyLength => 73
+MsgType => LOGON
+MsgSeqNum => 1
+SenderCompID => CLIENT
+SendingTime => 20181119-10:42:48.768
+TargetCompID => SERVER
+EncryptMethod => NONE_OTHER
+HeartBtInt => 30
+ResetSeqNumFlag => YES_RESET_SEQUENCE_NUMBERS
+CheckSum => 208
+
+[INFO][2020-08-13 15:57:40,258][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 15:58:14,666][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 15:58:14,670][com.example.fixparsing.FixParseApp]BeginString => FIXT.1.1
+BodyLength => 402
+MsgType => EXECUTION_REPORT
+SenderCompID => FGW
+TargetCompID => 123
+MsgSeqNum => 13939
+SendingTime => 20171013-10:56:41.008
+ApplVerID => Unknown
+OnBehalfOfCompID => 21146
+ExecID => E0XF1VrQVLRK
+ClOrdID => 20171013162640993
+OrderID => O0XF1ahT51rY
+MultiLegReportingType => 1
+ExecType => EXPIRED
+OrdStatus => EXPIRED
+Text => Expired (Price to convert breaches Price Bands)
+LeavesQty => 0
+CumQty => 0
+Symbol => COTTON14OCT17CE17414FNOV17
+NoPartyIDs => 3
+PartyID => 123451234512345
+PartyIDSource => PROPRIETARY
+PartyRole => Unknown
+OrdType => Unknown
+TimeInForce => DAY
+Side => BUY
+OrderQty => 50
+DisplayQty => 0
+TransactTime => 20171013-10:56:40.989
+1180 => 1
+30001 => 1
+AccountType => HOUSE_TRADER
+22009 => 28649
+CheckSum => 074
+
+[INFO][2020-08-13 16:15:10,882][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 16:15:31,728][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 16:17:49,901][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 16:18:00,837][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 16:18:12,830][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 16:18:24,735][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 16:19:09,584][com.example.fixparsing.FixParseApp]Type the FIX messages by line. Enter 'Q' to exit.
+[INFO][2020-08-13 16:19:17,513][com.example.fixparsing.FixParseApp]The results in simple format are as follows:
+[INFO][2020-08-13 16:19:17,518][com.example.fixparsing.FixParseApp]BeginString => FIXT.1.1
+BodyLength => 402
+MsgType => EXECUTION_REPORT
+SenderCompID => FGW
+TargetCompID => 123
+MsgSeqNum => 13939
+SendingTime => 20171013-10:56:41.008
+ApplVerID => Unknown
+OnBehalfOfCompID => 21146
+ExecID => E0XF1VrQVLRK
+ClOrdID => 20171013162640993
+OrderID => O0XF1ahT51rY
+MultiLegReportingType => 1
+ExecType => EXPIRED
+OrdStatus => EXPIRED
+Text => Expired (Price to convert breaches Price Bands)
+LeavesQty => 0
+CumQty => 0
+Symbol => COTTON14OCT17CE17414FNOV17
+NoPartyIDs => 3
+PartyID => 123451234512345
+PartyIDSource => PROPRIETARY
+PartyRole => Unknown
+OrdType => Unknown
+TimeInForce => DAY
+Side => BUY
+OrderQty => 50
+DisplayQty => 0
+TransactTime => 20171013-10:56:40.989
+1180 => 1
+30001 => 1
+AccountType => HOUSE_TRADER
+22009 => 28649
+CheckSum => 074
+
+[INFO][2020-08-13 18:07:46,886][com.example.fixparsing.FixParseApp]Cannot parse without configuration file!>_<
+Please enter configuration file path!
