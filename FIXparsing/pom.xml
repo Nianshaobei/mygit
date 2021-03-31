@@ -50,7 +50,7 @@
         <jakarta_validation_hibernate_version>6.1.5.Final</jakarta_validation_hibernate_version>
         <jakarta_el_glassfish_version>3.0.3</jakarta_el_glassfish_version>
 
-        <google_guava_version>28.1-jre</google_guava_version>
+        <google_guava_version>29.0-jre</google_guava_version>
         <google_guice_version>4.2.3</google_guice_version>
         <google_dagger2_version>2.27</google_dagger2_version>
         <google_autovalue_version>1.7.2</google_autovalue_version>
